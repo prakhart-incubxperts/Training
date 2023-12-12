@@ -3,9 +3,10 @@ import '../Asset/form.css';
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { savePatientDetails } from '../utils/functions';
 
-var id=0;
-
+const id=1;
+var n=0;
 
 
 
@@ -21,13 +22,13 @@ function Form(){
     doc:""
   });
 
-  const doc =['Dr.1','Dr.2','Dr.3'];
+  const doc =['select Dr.','Dr.1','Dr.2','Dr.3'];
     let state;
-    const countrie =['Germany','India','France']
+    const countrie =['select country','Germany','India','France']
 
-    const gstate = ['Duesseldorf', 'Leinfelden-Echterdingen', 'Eschborn']
-    const istate = ['MH', 'Goa', 'MP', 'Delhi']
-    const fstate =['Auvergne','Bretagne','Corse','Centre']
+    const gstate = ['select state','Duesseldorf', 'Leinfelden-Echterdingen', 'Eschborn']
+    const istate = ['select state','MH', 'Goa', 'MP', 'Delhi']
+    const fstate =['select state','Auvergne','Bretagne','Corse','Centre']
 
     if(cdata.countrie==="Germany"){
 
@@ -73,28 +74,43 @@ function Form(){
     
 
     const[data,setData]=useState();
-    const details=[{
-      fullname:fullname,
-      gender:gender,
-      dob:dob,
-      ref:ref.doc,
-      address:address,
-      country:cdata.countrie,
-      state:cdata.state,
-      mobile:mobile,
-      email:email,
-      note:note
-    }];
+    
+ 
 
     function save(event){
-      id++;
-        //event.preventDefault();
+      const details={
+        pid:n++,
+        fullname:fullname,
+        gender:gender,
+        dob:dob,
+        ref:ref.doc,
+        address:address,
+        country:cdata.countrie,
+        state:cdata.state,
+        mobile:mobile,
+        email:email,
+        note:note
+      };
+      
+     
+      event.preventDefault("");
+      savePatientDetails(details);
+      
+      
+
+      //id;
+        
        // var response=([fullname,gender,dob,ref,address,country,state,mobile,note]);
-        console.log("details",details);
-        //let string=JSON.stringify(details)
-        console.log("fullanme", JSON.stringify(details[0]));
-        //setData(response);
-       localStorage.setItem(`patient${id}`, JSON.stringify(details));
+      //   console.log("details",details);
+      //   let string=JSON.stringify(details)
+      //   console.log("fullanme", JSON.stringify(details[0]));
+      //   setData(response);
+      //  localStorage.setItem(id, JSON.stringify(details));
+
+
+      //  var array = JSON.parse(localStorage.getItem('PatientDetails') || '[]');
+      //     array.push(details);
+      //   localStorage.setItem('PatientDetails', JSON.stringify(array));
         
     }
 
@@ -208,9 +224,17 @@ function Form(){
                                             <div className="col-md-4">
                                                 <div className="form-group">
 
-                                                    <label className="radio-inline">
+
+                                                <select className="custom-select d-block w-75" id="gender" value={gender}
+          onChange={(event) => setGender(event.target.value)} required>
+                        <option value="">Choose...</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                      </select>
+                                                    {/* <label className="radio-inline">
                                                         <input type="radio" className="form-control" name="gender_female" id='female' value={gender}
-          onChange={(event) => setGender('female')}required/>
+          onChange={(event) => setGender("female")}required/>
                                                         Female
                                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;
                                                 
@@ -219,7 +243,7 @@ function Form(){
                                                         <input type="radio" className="form-control" name="gender_male" id='male' value={gender}
           onChange={(event) => setGender('male')}required/>
                                                          Male 
-                                                    </label>
+                                                    </label> */}
                                                 </div>
                                             </div>
 

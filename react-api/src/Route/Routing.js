@@ -1,7 +1,7 @@
 import { BrowserRouter as Router} from "react-router-dom";
 import { Route,Routes } from "react-router-dom";
-import Form from '../Pages/form';
-import Display from '../Pages/form copy';
+import Form from '../Pages/patientRegistration';
+import Display from '../Pages/detailForm';
 
 
 function Routing(){

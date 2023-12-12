@@ -1,9 +1,11 @@
-import { ReactDOM } from 'react';
+import { ReactDOM, useEffect } from 'react';
 import '../Asset/form.css';
 import { useState } from 'react';
 import { Button } from 'bootstrap';
 import DataTable from 'react-data-table-component';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { deletePatientData } from '../utils/functions';
+//import { editPatientData } from '../utils/functions';
 
 
 
@@ -54,7 +56,7 @@ function Display() {
   //   id += 1;
   //   return id;
   // }
-  // var ids = id();
+  //  var ids = id();
   // const get = JSON.stringify(localStorage.getItem(`patient${ids}`))
   // const setUs = ([get]);
 
@@ -65,8 +67,41 @@ function Display() {
   //   var setUs = ([get]);
   //   id++;
   // }
+  const navigate=useNavigate();
+  function editPatientData(pid){
+     
+  console.log(' called from edit pid:',pid);
+  const data=(JSON.parse(localStorage.getItem('PatientDetails')));
+  
+  var index;  
+  data.findIndex(function (entry, i) { 
+      if (entry.pid == (pid)) { 
+          index = i; 
+          return true; 
+      } 
+  });
+  const firstValue = Object.values(data)[index];
+  handleClick(firstValue);
+    function handleClick(data) {
+      navigate("/");
+      debugger;
+
+    // document.getElementById('name')?.value = data?.fullname;
+    // document.getElementById('gender')?.value = data?.gender;
+    // document.getElementById('dob')?.value = data?.dob;
+    }
+    
+    
+  }
+
+
+  var n=0;
 
   const columns = [
+    {
+      name: 'Id',
+      selector: row => row.pid,
+    },
     {
       name: 'Name',
       selector: row => row.fullname,
@@ -110,33 +145,35 @@ function Display() {
     {
       name: 'Action',
       selector: row => {
-        return <button className='btn btn-primary' >edit</button>
-      }
+        
+        return <button className='btn btn-primary'  onClick={() => editPatientData(row.pid)}>edit</button>
+      },
     },
     {
       name: 'Action',
       selector: row => {
-        return <button className='btn btn-danger' >delete</button>
+        return <button className='btn btn-danger'  onClick={() => deletePatientData(row.pid)}>delete</button>
       }
     },
   ];
-
   // const data = [{},]
-  
+  //n++; //first block
 var det;
   // const kvk=JSON.parse(localStorage.getItem('patient1'))
 
   // console.log('kvk',kvk);
-  Object.keys(localStorage).forEach(key =>{
-     det=JSON.parse(localStorage.getItem(key));
-    console.log('det data:',det);
-  });
-  console.log('object.keys=',Object.keys(localStorage));
-  const data=Object.keys(localStorage);
-
-
+  // Object.keys(localStorage).forEach(key =>{
+  //    det=JSON.parse(localStorage.getItem(key));
+  //   console.log('det data:',det);
+  // });
+  // console.log('object.keys=',Object.keys(localStorage));
+  // const data=Object.keys(localStorage);
+//const data=Object.keys(localStorage).map(key => JSON.parse(localStorage.getItem(key)));
+const data=(JSON.parse(localStorage.getItem('PatientDetails')));
 
   console.log("data after obj.key",data);
+  console.log(typeof(data));
+  console.log(data);
 
 
  debugger;
@@ -183,7 +220,10 @@ var det;
 //       "note": "xy"
 //   }
 // ]
-
+useEffect(()=>
+{
+  console.log('table data:',data);
+})
   return (
     <div>
       <link
@@ -235,9 +275,8 @@ var det;
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="nav-link" href="#">
-
-                </a>
+              <Link to='/'>Registration
+              </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#">
@@ -257,7 +296,8 @@ var det;
                 <div className="card-body">
                  
                   <DataTable columns={columns}
-                    data={det}>
+                    
+                    data={data}>
 
                   </DataTable>  
                 </div>
