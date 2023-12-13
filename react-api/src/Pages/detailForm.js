@@ -5,12 +5,46 @@ import { Button } from 'bootstrap';
 import DataTable from 'react-data-table-component';
 import { Link, useNavigate } from 'react-router-dom';
 import { deletePatientData } from '../utils/functions';
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+//import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 //import { editPatientData } from '../utils/functions';
+//import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+// import Form, {
+//   Input,
+//   Select,
+//   SubmitButton,
+// } from 'react-form-component'
 
 
+
+
+
+
+const style = {
+  position: 'relative',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  overflow: 'scroll',
+  height: '100%'
+};
 
 
 function Display() {
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   // const[country,setCountry]=useState();
   // const[state,setState]=useState();
@@ -67,35 +101,42 @@ function Display() {
   //   var setUs = ([get]);
   //   id++;
   // }
-  const navigate=useNavigate();
-  function editPatientData(pid){
-     
-  console.log(' called from edit pid:',pid);
-  const data=(JSON.parse(localStorage.getItem('PatientDetails')));
-  
-  var index;  
-  data.findIndex(function (entry, i) { 
-      if (entry.pid == (pid)) { 
-          index = i; 
-          return true; 
-      } 
-  });
-  const firstValue = Object.values(data)[index];
-  handleClick(firstValue);
-    function handleClick(data) {
-      navigate("/");
-      debugger;
+  const navigate = useNavigate();
+  function editPatientData(pid) {
 
-    // document.getElementById('name')?.value = data?.fullname;
-    // document.getElementById('gender')?.value = data?.gender;
-    // document.getElementById('dob')?.value = data?.dob;
-    }
+    //handleOpen();
     
-    
+    console.log(' called from edit pid:', pid);
+    const data = (JSON.parse(localStorage.getItem('PatientDetails')));
+
+    var index;
+    data.findIndex(function (entry, i) {
+      if (entry.pid == (pid)) {
+        index = i;
+        return true;
+      }
+    });
+
+    const firstValue = Object.values(data)[index];
+    console.log("fetched data",firstValue);
+
+    //console.log('formdata:',Form.Group.);
+    //FormData.controlId('name')=firstValue.name;
+    // handleClick(firstValue);
+    //   function handleClick(data) {
+    //     navigate("/");
+    //     debugger;
+
+    //   // document.getElementById('name')?.value = data?.fullname;
+    //   // document.getElementById('gender')?.value = data?.gender;
+    //   // document.getElementById('dob')?.value = data?.dob;
+    //   }
+
+
   }
 
 
-  var n=0;
+  var n = 0;
 
   const columns = [
     {
@@ -145,20 +186,20 @@ function Display() {
     {
       name: 'Action',
       selector: row => {
-        
-        return <button className='btn btn-primary'  onClick={() => editPatientData(row.pid)}>edit</button>
+
+        return <button className='btn btn-primary' onClick={() => editPatientData(row.pid)}>edit</button>
       },
     },
     {
       name: 'Action',
       selector: row => {
-        return <button className='btn btn-danger'  onClick={() => deletePatientData(row.pid)}>delete</button>
+        return <button className='btn btn-danger' onClick={() => deletePatientData(row.pid)}>delete</button>
       }
     },
   ];
   // const data = [{},]
   //n++; //first block
-var det;
+  var det;
   // const kvk=JSON.parse(localStorage.getItem('patient1'))
 
   // console.log('kvk',kvk);
@@ -168,15 +209,15 @@ var det;
   // });
   // console.log('object.keys=',Object.keys(localStorage));
   // const data=Object.keys(localStorage);
-//const data=Object.keys(localStorage).map(key => JSON.parse(localStorage.getItem(key)));
-const data=(JSON.parse(localStorage.getItem('PatientDetails')));
+  //const data=Object.keys(localStorage).map(key => JSON.parse(localStorage.getItem(key)));
+  const data = (JSON.parse(localStorage.getItem('PatientDetails')));
 
-  console.log("data after obj.key",data);
-  console.log(typeof(data));
+  console.log("data after obj.key", data);
+  console.log(typeof (data));
   console.log(data);
 
 
- debugger;
+  debugger;
   // Object.keys(localStorage).forEach(key => {
   //   console.log('inside object.key',key);
   //   const det=localStorage.getItem(key);
@@ -199,31 +240,30 @@ const data=(JSON.parse(localStorage.getItem('PatientDetails')));
   //       note:obj[0].note,
   //     }]
   //const data = obj[0].fullname;
- 
+
   // console.log("cbdhdbc",data1)
   //   console.log(`${key} - ${localStorage.getItem(key)}`);
   // });
-   
 
 
-//   const data = [
-//     {
-//       "fullname": "xy",
-//       "gender": "female",
-//       "dob": "2023-12-30",
-//       "ref": "Dr.2",
-//       "address": "xy",
-//       "country": "India",
-//       "state": "Goa",
-//       "mobile": "1",
-//       "email": "xy",
-//       "note": "xy"
-//   }
-// ]
-useEffect(()=>
-{
-  console.log('table data:',data);
-})
+
+  //   const data = [
+  //     {
+  //       "fullname": "xy",
+  //       "gender": "female",
+  //       "dob": "2023-12-30",
+  //       "ref": "Dr.2",
+  //       "address": "xy",
+  //       "country": "India",
+  //       "state": "Goa",
+  //       "mobile": "1",
+  //       "email": "xy",
+  //       "note": "xy"
+  //   }
+  // ]
+  useEffect(() => {
+    console.log('table data:', data);
+  })
   return (
     <div>
       <link
@@ -255,7 +295,7 @@ useEffect(()=>
       <nav className="navbar navbar-expand-lg navbar-light navbar-laravel">
         <div className="container">
           <a className="navbar-brand" href="#">
-            Task No. 1
+            Patient Screen
           </a>
           {/* <div style={{height:'150ph',display:'grid',justifyContent:'left'}}>
         <input type='image' style={{height:'150px'}}>
@@ -275,8 +315,8 @@ useEffect(()=>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-              <Link to='/'>Registration
-              </Link>
+                <Link to='/'>Registration
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#">
@@ -294,12 +334,91 @@ useEffect(()=>
               <div className="card" style={{ display: '' }}>
                 <div className="card-header">Registration Details</div>
                 <div className="card-body">
-                 
+
                   <DataTable columns={columns}
-                    
+
                     data={data}>
 
-                  </DataTable>  
+                  </DataTable>
+                  <div>
+                    <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      open={open}
+                      onClose={handleClose}
+                      closeAfterTransition
+                      slots={{ backdrop: Backdrop }}
+                      slotProps={{
+                        backdrop: {
+                          timeout: 500,
+                        },
+                      }}
+                    >
+                      <Fade in={open}>
+                        <Box sx={style}>
+                          <Form>
+                            <Form.Group className="mb-3" controlId="name">
+                              <Form.Label>Name</Form.Label>
+                              <Form.Control type="text" placeholder="" />
+                            </Form.Group>
+                            <Form.Select aria-label="Default select example" controlId="gender">
+                              <option>Gender</option>
+                              <option value="1">Male</option>
+                              <option value="2">Female</option>
+                            </Form.Select>
+                            <Form.Group className="mb-3" controlId="dob">
+                              <Form.Label>DOB</Form.Label>
+                              <Form.Control type="date" placeholder="" />
+                            </Form.Group>
+                            <Form.Select aria-label="Default select example" controlId="refdoc">
+                              <option>Ref. Dr.</option>
+                              <option value="Dr.1">Dr. 1</option>
+                              <option value="Dr.2">Dr. 2</option>
+                              <option value="Dr.3">Dr. 3</option>
+                            </Form.Select>
+                            <Form.Group className="mb-3" controlId="address">
+                              <Form.Label>Address</Form.Label>
+                              <Form.Control type="text" placeholder="" />
+                            </Form.Group>
+                            <Form.Select aria-label="Default select example" controlId="country">
+                              <option>Country</option>
+                              <option value="1">India</option>
+                              <option value="2">Other</option>
+                            </Form.Select>
+                            <Form.Select aria-label="Default select example" controlId="state">
+                              <option>State</option>
+                              <option value="1">MH</option>
+                              <option value="2">Goa</option>
+                            </Form.Select>
+                            <Form.Group className="mb-3" controlId="mobile">
+                              <Form.Label>Mobile</Form.Label>
+                              <Form.Control type="number" placeholder="" />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="email">
+                              <Form.Label>Email</Form.Label>
+                              <Form.Control type="email" placeholder="" />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="note">
+                              <Form.Label>Note</Form.Label>
+                              <Form.Control type="text" placeholder="" />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                              <Form.Check type="checkbox" label="Check me out" />
+                            </Form.Group>
+                            {/* <Button variant="primary" type="submit">
+                              Submit
+                            </Button> */}
+                          </Form>
+                          {/* <Typography id="transition-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography> */}
+                        </Box>
+                      </Fade>
+                    </Modal>
+                  </div>
                 </div>
               </div>
             </div>

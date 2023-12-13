@@ -3,17 +3,21 @@ import ReactDOM from 'react-dom/client';
 // import { BrowserRouter as Router} from "react-router-dom";
 // import { Route,Routes } from "react-router-dom";
 //import { Switch } from "react-router-dom";
+import { FormThemeProvider } from 'react-form-component';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../src/Asset/index.css';
 import reportWebVitals from './reportWebVitals';
 
 import Routing from './Route/Routing';
+import RegistrationForm from './Pages/patientRegistration';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    
     <Routing></Routing>
+    
     
   </React.StrictMode>
 );
