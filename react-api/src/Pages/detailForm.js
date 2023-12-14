@@ -1,7 +1,7 @@
 import { ReactDOM, useEffect } from 'react';
 import '../Asset/form.css';
 import { useState } from 'react';
-import { Button } from 'bootstrap';
+//import { Button } from 'bootstrap';
 import DataTable from 'react-data-table-component';
 import { Link, useNavigate } from 'react-router-dom';
 import { deletePatientData } from '../utils/functions';
@@ -12,8 +12,10 @@ import Fade from '@mui/material/Fade';
 //import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 //import { editPatientData } from '../utils/functions';
-//import Button from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { FormControl } from '@mui/material';
+var oldpid,oldimage;
 // import Form, {
 //   Input,
 //   Select,
@@ -42,71 +44,57 @@ const style = {
 
 function Display() {
 
+  const [fullname, setFullname] = useState();
+  const [address, setAddress] = useState();
+  const [email, setEmail] = useState();
+  const [gender, setGender] = useState();
+  const [dob, setDob] = useState();
+  const [note, setNote] = useState();
+  const [mobile, setMobile] = useState();
+  const [image, setImage] = useState();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  // const[country,setCountry]=useState();
-  // const[state,setState]=useState();
-  // const[states,setStates]=useState([]);
-
-  // const changeCountry=(event)=>{
-  //     setCountry(event.target.value);
-  //     setStates(countries.find(ctrs=>ctrs.name===event.target.value).states)
-  // }
-  // const changeState=(event)=>{
-  //     setState(event.target.value);
-  // }
-
-
-  // const[fullname,setFullname]=useState();
-  // const[address,setAddress]=useState();
-  // const[email,setEmail]=useState();
-  // const[gender,setGender]=useState();
-  // const[dob,setDob]=useState();
-  // const[note,setNote]=useState();
-  // const[mobile,setMobile]=useState();
-  // const[ref,setRef]=useState();
-
-  // const[data,setData]=useState();
-  // const details={
-  //   fullanme:fullname,
-  //   gender:gender,
-  //   dob:dob,
-  //   ref:ref,
-  //   address:address,
-  //   country:country,
-  //   state:state,
-  //   mobile:mobile,
-  //   email:email,
-  //   note:note
-  // }
-
-
-
-
-
-  // function id() {
-  //   id += 1;
-  //   return id;
-  // }
-  //  var ids = id();
-  // const get = JSON.stringify(localStorage.getItem(`patient${ids}`))
-  // const setUs = ([get]);
-
-  // function Showdata(event) {
-  //   var id = 1;
-  //   event.preventDefault();
-  //   var get = JSON.stringify(localStorage.getItem(`patient${ids}`))
-  //   var setUs = ([get]);
-  //   id++;
-  // }
+  const [formValue,setFormValue]=useState('');
+  const doc = ['select Dr.', 'Dr.1', 'Dr.2', 'Dr.3'];
+  const countrie = ['select country', 'Germany', 'India', 'France']
+  const gstate = ['select state', 'Duesseldorf', 'Leinfelden-Echterdingen', 'Eschborn']
+  const istate = ['select state', 'MH', 'Goa', 'MP', 'Delhi']
+  const fstate = ['select state', 'Auvergne', 'Bretagne', 'Corse', 'Centre']
+  const [cdata, setName] = useState({countrie: "", state: ""});
+  const [ref, setRef] = useState({doc: ""});
   const navigate = useNavigate();
-  function editPatientData(pid) {
+  let state;
+  
+  if (cdata.countrie === "Germany") {
+    state = gstate.map((gstate, key) => <option key={key} value={gstate}>{gstate}</option>)
+  }
+  else if (cdata.countrie === "India") {
+    state = istate.map((istate, key) => <option key={key} value={istate}>{istate}</option>)
+  }
+  else {
+    state = fstate.map((fstate, key) => <option key={key} value={fstate}>{fstate}</option>)
+  }
+  const countries = countrie.map((countrie, key) => <option key={key} value={countrie}>{countrie}</option>);
+  const docs = doc.map((doc, key) => <option key={key} value={doc}>{doc}</option>);
+  function handleCountry(e) {
+    setName({ ...cdata, countrie: e.target.value });
+  }
 
-    //handleOpen();
-    
-    console.log(' called from edit pid:', pid);
+  function handleStateChange(e) {
+    setName({ ...cdata, state: e.target.value });
+  }
+
+
+  function handleRefChange(e) {
+    setRef({ ...ref, doc: e.target.value });
+  }
+  
+  function editPatientData(pid,event) {
+    debugger;
+    console.log('pid',pid);
+    oldpid=pid;
+    console.log(' called from edit pid:', oldpid);
     const data = (JSON.parse(localStorage.getItem('PatientDetails')));
 
     var index;
@@ -118,22 +106,76 @@ function Display() {
     });
 
     const firstValue = Object.values(data)[index];
+    oldimage=firstValue.image;
     console.log("fetched data",firstValue);
-
-    //console.log('formdata:',Form.Group.);
-    //FormData.controlId('name')=firstValue.name;
-    // handleClick(firstValue);
-    //   function handleClick(data) {
-    //     navigate("/");
-    //     debugger;
-
-    //   // document.getElementById('name')?.value = data?.fullname;
-    //   // document.getElementById('gender')?.value = data?.gender;
-    //   // document.getElementById('dob')?.value = data?.dob;
-    //   }
-
+    console.log("fetched data fullname:",firstValue.fullname);
+    
+    setFormValue(firstValue);
+    console.log('formValue type:',typeof(formValue));
+    console.log('formValue dob:',formValue.dob);
+    handleOpen();
 
   }
+
+  function editData(event){
+    debugger;
+    
+    
+    const data=(JSON.parse(localStorage.getItem('PatientDetails')));
+    var index; 
+    data.findIndex(function (entry, i) { 
+      if (entry.pid == (oldpid)) { 
+          index = i; 
+          return true; 
+      } 
+  });
+    var splcdData=data.splice(index,oldpid);
+    const isEmpty=data.lenght;
+    console.log('object empty',isEmpty);
+    const details = {
+      pid: oldpid,
+      fullname: fullname,
+      gender: gender,
+      dob: dob,
+      ref: ref.doc,
+      address: address,
+      country: cdata.countrie,
+      state: cdata.state,
+      mobile: mobile,
+      email: email,
+      note: note,
+      image: oldimage,
+    };
+    if(isEmpty){
+      localStorage.setItem('PatientDetails', JSON.stringify(details));
+    }
+    else{
+      data.append(details);
+      var array = JSON.parse(localStorage.getItem('PatientDetails') || '[]');
+    array.push(details);
+  localStorage.setItem('PatientDetails', JSON.stringify(array));
+  alert('Data saved successfully...');
+    }
+    
+    
+    
+    
+    
+
+    
+ 
+ 
+
+
+ 
+ 
+
+
+
+    
+    handleClose();
+  }
+
 
 
   var n = 0;
@@ -297,21 +339,7 @@ function Display() {
           <a className="navbar-brand" href="#">
             Patient Screen
           </a>
-          {/* <div style={{height:'150ph',display:'grid',justifyContent:'left'}}>
-        <input type='image' style={{height:'150px'}}>
-        </input>
-      </div> */}
-          {/* <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon" />
-      </button> */}
+          
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
@@ -357,57 +385,50 @@ function Display() {
                       <Fade in={open}>
                         <Box sx={style}>
                           <Form>
-                            <Form.Group className="mb-3" controlId="name">
+                            <Form.Group className="mb-3" controlId="fullname">
                               <Form.Label>Name</Form.Label>
-                              <Form.Control type="text" placeholder="" />
+                              <Form.Control type="text" placeholder="" value={formValue.fullname} onChange={(event) => (setFormValue(event.target.value),setFullname(event.target.value))} name='fullname' />
                             </Form.Group>
-                            <Form.Select aria-label="Default select example" controlId="gender">
+                            <Form.Select aria-label="Default select example" controlId="gender" value={formValue} onChange={(event) => (setFormValue(event.target.value),setGender(event.target.value))}>
                               <option>Gender</option>
-                              <option value="1">Male</option>
-                              <option value="2">Female</option>
+                              <option value={formValue}>Male</option>
+                              <option value={formValue}>Female</option>
                             </Form.Select>
                             <Form.Group className="mb-3" controlId="dob">
                               <Form.Label>DOB</Form.Label>
-                              <Form.Control type="date" placeholder="" />
+                              <Form.Control type="date" placeholder="" value={formValue.dob} name='dob'onChange={(event) => (setFormValue(event.target.value),setDob(event.target.value))}/>
                             </Form.Group>
-                            <Form.Select aria-label="Default select example" controlId="refdoc">
-                              <option>Ref. Dr.</option>
-                              <option value="Dr.1">Dr. 1</option>
-                              <option value="Dr.2">Dr. 2</option>
-                              <option value="Dr.3">Dr. 3</option>
+                            <Form.Select aria-label="Default select example" controlId="refdoc" value={ref.doc} onChange={handleRefChange}>
+                            {docs}
                             </Form.Select>
                             <Form.Group className="mb-3" controlId="address">
                               <Form.Label>Address</Form.Label>
-                              <Form.Control type="text" placeholder="" />
+                              <Form.Control type="text" placeholder="" name='address' value={formValue.address} onChange={(event) => (setFormValue(event.target.value),setAddress(event.target.value))}/>
                             </Form.Group>
-                            <Form.Select aria-label="Default select example" controlId="country">
-                              <option>Country</option>
-                              <option value="1">India</option>
-                              <option value="2">Other</option>
+                            <Form.Select aria-label="Default select example" controlId="country" value={cdata.countrie} onChange={handleCountry} >
+                            {countries}
                             </Form.Select>
-                            <Form.Select aria-label="Default select example" controlId="state">
-                              <option>State</option>
-                              <option value="1">MH</option>
-                              <option value="2">Goa</option>
+                            <Form.Select aria-label="Default select example" controlId="state" value={cdata.state} onChange={handleStateChange}>
+                            
+                          {state}
+                        
                             </Form.Select>
                             <Form.Group className="mb-3" controlId="mobile">
                               <Form.Label>Mobile</Form.Label>
-                              <Form.Control type="number" placeholder="" />
+                              <Form.Control type="text" placeholder=""  value={formValue.mobile} name='mobile' onChange={(event) => (setFormValue(event.target.value),setMobile(event.target.value))}/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="email">
                               <Form.Label>Email</Form.Label>
-                              <Form.Control type="email" placeholder="" />
+                              <Form.Control type="email" placeholder="" value={formValue.email} name='email'onChange={(event) => (setFormValue(event.target.value),setEmail(event.target.value))}/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="note">
                               <Form.Label>Note</Form.Label>
-                              <Form.Control type="text" placeholder="" />
+                              <Form.Control type="text" placeholder="" value={formValue.note} name='note'onChange={(event) => (setFormValue(event.target.value),setNote(event.target.value))}/>
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                              <Form.Check type="checkbox" label="Check me out" />
-                            </Form.Group>
-                            {/* <Button variant="primary" type="submit">
+                            
+                            <Button variant="primary" type="submit" onClick={editData}>
                               Submit
-                            </Button> */}
+                            </Button>
                           </Form>
                           {/* <Typography id="transition-modal-title" variant="h6" component="h2">
               Text in a modal
@@ -432,3 +453,40 @@ function Display() {
 export default Display;
 
 
+
+
+ // const[country,setCountry]=useState();
+  // const[state,setState]=useState();
+  // const[states,setStates]=useState([]);
+
+  // const changeCountry=(event)=>{
+  //     setCountry(event.target.value);
+  //     setStates(countries.find(ctrs=>ctrs.name===event.target.value).states)
+  // }
+  // const changeState=(event)=>{
+  //     setState(event.target.value);
+  // }
+
+
+  // const[fullname,setFullname]=useState();
+  // const[address,setAddress]=useState();
+  // const[email,setEmail]=useState();
+  // const[gender,setGender]=useState();
+  // const[dob,setDob]=useState();
+  // const[note,setNote]=useState();
+  // const[mobile,setMobile]=useState();
+  // const[ref,setRef]=useState();
+
+  // const[data,setData]=useState();
+  // const details={
+  //   fullanme:fullname,
+  //   gender:gender,
+  //   dob:dob,
+  //   ref:ref,
+  //   address:address,
+  //   country:country,
+  //   state:state,
+  //   mobile:mobile,
+  //   email:email,
+  //   note:note
+  // }
